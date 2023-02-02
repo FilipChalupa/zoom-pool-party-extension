@@ -1,5 +1,11 @@
 {
 	"manifest_version": 3,
 	"name": "Zoom pool party",
-	"version": "1.0.01"
+	"version": "1.0.0",
+	"content_scripts": [
+		{
+			"js": ["scripts/content.js"],
+			"matches": ["https://zoom.us/wc/*", "https://pwa.zoom.us/wc/*"]
+		}
+	]
 }
