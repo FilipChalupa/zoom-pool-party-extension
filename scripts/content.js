@@ -13,6 +13,7 @@ const findNames = debounce(() => {
 		document.querySelectorAll('.participants-item__display-name'),
 	).map((name) => name.textContent)
 	console.log(names)
+	chrome.runtime.sendMessage({ participantsCount: names.length })
 })
 
 const observer = new MutationObserver((mutationsList) => {
