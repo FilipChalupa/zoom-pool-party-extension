@@ -51,8 +51,8 @@ chrome.runtime.onMessage.addListener(async (request) => {
 		console.log('Remove participants')
 		console.log(request.removeParticipants)
 		// @TODO: batching
-		for (const participant of request.addParticipants) {
-			const docRef = doc(db, 'pools', poolId, 'participants', participant.id)
+		for (const { id } of request.removeParticipants) {
+			const docRef = doc(db, 'pools', poolId, 'participants', id)
 			await deleteDoc(docRef)
 		}
 	}
