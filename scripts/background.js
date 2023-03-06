@@ -1,7 +1,9 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js'
 import {
+	collection,
 	deleteDoc,
 	doc,
+	getDocs,
 	getFirestore,
 	setDoc,
 } from 'https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore.js'
@@ -20,7 +22,6 @@ const db = getFirestore(app)
 console.log(db)
 
 const poolId = 'RGGAKI4GcohaIXbaSs3v' // @TODO: get from popup
-//const participantsRef = collection(db, "pools", poolId, "participants");
 
 chrome.runtime.onMessage.addListener(async (request) => {
 	if ('participantsCount' in request) {
@@ -30,8 +31,12 @@ chrome.runtime.onMessage.addListener(async (request) => {
 	}
 	if ('reset' in request && request.reset) {
 		console.log('Reset')
-		const docRef = doc(db, 'pools', poolId)
-		await deleteDoc(docRef)
+		const colRef = collection(db, 'pools', poolId, 'participants')
+		const participantsSnapshot = await getDocs(colRef)
+		// @TODO: batching
+		participantsSnapshot.forEach((doc) => {
+			deleteDoc(doc.ref)
+		})
 	}
 	if ('addParticipants' in request && request.addParticipants.length > 0) {
 		console.log('Add participants')
